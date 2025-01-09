@@ -2,13 +2,13 @@
 
 pragma solidity ^0.8.0;
 
-import "./structs/task.sol";
+import "../structs/task.sol";
 
 contract TodoList {
 
     address public owner = msg.sender;
     uint public taskCost = 0.01 ether;
-    Task[] private tasks;
+    Task[] public tasks;
 
     event TaskCreated(uint taskId, string description, TaskState state);
     event TaskUpdated(uint taskId, string description, TaskState state);
@@ -58,6 +58,7 @@ contract TodoList {
     function deleteTask(uint taskId) public onlyOwner() {
         delete tasks[taskId];
         emit TaskDeleted(taskId);
+        payable(msg.sender).transfer(taskCost);
     }
 
 }
